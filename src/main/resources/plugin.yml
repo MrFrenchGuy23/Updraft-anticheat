@@ -1,0 +1,73 @@
+name: UpdraftAC
+version: '${version}'
+main: com.updraft.anticheat.UpdraftAC
+api-version: '1.21'
+authors: [ mrfrenchgoon ]
+description: Updraft Anti-Cheat  packet-level detection, violations, logging, LuckPerms, and Discord alerts.
+website: http://play.updraftnetwork.org
+
+# PacketEvents must be present for packet-level checks to run.
+depend: [ PacketEvents ]
+softdepend: [ LuckPerms, PlaceholderAPI, Vault ]
+
+commands:
+  updraft:
+    description: Updraft Anti-Cheat root command
+    aliases: [ ac, anticheat ]
+    usage: /updraft help
+    permission: updraft.command.updraft
+
+permissions:
+  updraft.*:
+    description: Grants all Updraft Anti-Cheat permissions
+    default: op
+    children:
+      updraft.alerts: true
+      updraft.bypass.*: true
+      updraft.exempt.*: true
+      updraft.command.*: true
+  updraft.alerts:
+    description: Receive anticheat alerts
+    default: op
+  updraft.command.*:
+    description: Grants all Updraft commands
+    default: op
+    children:
+      updraft.command.updraft: true
+      updraft.command.info: true
+      updraft.command.violations: true
+      updraft.command.logs: true
+      updraft.command.commands: true
+      updraft.command.reload: true
+      updraft.command.exempt: true
+      updraft.command.checks: true
+  updraft.command.updraft:
+    description: Allows use of /updraft
+    default: op
+  updraft.command.info:
+    description: Allows use of /updraft info
+    default: op
+  updraft.command.violations:
+    description: Allows use of /updraft violations
+    default: op
+  updraft.command.logs:
+    description: Allows use of /updraft logs
+    default: op
+  updraft.command.commands:
+    description: Allows use of /updraft commands
+    default: op
+  updraft.command.reload:
+    description: Allows use of /updraft reload
+    default: op
+  updraft.command.exempt:
+    description: Allows use of /updraft exempt
+    default: op
+  updraft.command.checks:
+    description: Allows use of /updraft checks
+    default: op
+  updraft.exempt.*:
+    description: Exempt from all checks (per-check children: updraft.exempt.<check-id>)
+    default: false
+  updraft.bypass.*:
+    description: Bypasses punishment entirely (per-check children: updraft.bypass.<check-id>)
+    default: false

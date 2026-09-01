@@ -1,0 +1,68 @@
+# ============================================================
+#  Updraft Anti-Cheat — Messages
+#  Color codes: &0-9, &a-f, &k, &l, &m, &n, &o, &r
+#  Placeholders per message are documented inline.
+# ============================================================
+
+prefix: "&8[&bUpdraft&8] &r"
+
+# %prefix%, %player%, %check%, %vl%, %color% (auto from VL bucket), %ping%, %maxvl%
+alert:
+  hotbar: "%color%%player% &7failed &f%check% &8| &7VL &f%vl%&8/&f%maxvl% &8| &7ping &f%ping%ms"
+  bossbar: "%color%%player% &7failed &f%check% &8(&f%vl%&8)"
+  console: "[ALERT] %player% failed %check% (vl=%vl%, ping=%ping%ms)"
+
+# Command feedback messages.
+commands:
+  no-permission: "%prefix%&cYou do not have permission for that."
+  player-only: "%prefix%&cThis command can only be run by a player."
+  player-not-found: "%prefix%&cPlayer not found: &f%target%"
+  reload-success: "%prefix%&aReloaded configuration in &f%time%ms&a."
+  alerts-toggled-on: "%prefix%&aAlerts &2enabled&a."
+  alerts-toggled-off: "%prefix%&cAlerts &4disabled&c."
+  exempt-added: "%prefix%&aExempted &f%player% &afrom &f%check%&a."
+  exempt-removed: "%prefix%&aRemoved exemption for &f%player% &aon &f%check%&a."
+  exempt-none: "%prefix%&7%player% &ahas no exemptions."
+  check-disabled: "%prefix%&cCheck &f%check% &cis disabled."
+  check-not-found: "%prefix%&cUnknown check: &f%check%"
+
+  # /updraft help header
+  help-header: "&8&m-----------&r &bUpdraft AC &8&m-----------"
+  help-line: "&8 &b%usage% &7- %description%"
+  help-footer: "&8&m------------------------------------"
+
+  # /updraft info <player>
+  info-header: "&8&m-----------&r &b%player% &8&m-----------"
+  info-line: "&8 &7%key%: &f%value%"
+  info-footer: "&8&m------------------------------------"
+
+  # /updraft violations <player>
+  violations-empty: "%prefix%&7%player% &ahas no recorded violations."
+  violations-header: "&8&m---&r &b%player% &7violations &8&m---"
+  violations-line: "&8 &7%check%: &f%vl% &8(&7max %maxvl%&8)"
+
+  # /updraft logs <player>
+  logs-empty: "%prefix%&7%player% &ahas no stored logs."
+  logs-header: "&8&m---&r &b%player% &7recent logs &8&m---"
+  logs-line: "&8 &7[%time%] &f%check% &8| &7vl &f%vl% &8| &7%action%"
+  logs-footer: "&8&m------------------------"
+
+  # /updraft commands <player>
+  cmdlogs-empty: "%prefix%&7%player% &ahas no recorded commands."
+  cmdlogs-header: "&8&m---&r &b%player% &7recent commands &8&m---"
+  cmdlogs-line: "&8 &7[%time%] &f%command% &8(&7%world%&8)"
+  cmdlogs-footer: "&8&m------------------------"
+
+  # /updraft checks
+  checks-header: "&8&m---&r &bRegistered checks &8&m---"
+  checks-line: "&8 &7[%category%] &f%id% &8(&aenabled&8: %enabled%&8)"
+
+# Plugin enable/disable log lines (console only).
+system:
+  enabled: "%prefix%&aUpdraft AC v%version% enabled."
+  disabled: "%prefix%&cUpdraft AC disabled."
+  storage: "%prefix%&7Storage backend: &f%backend%"
+  storage-error: "%prefix%&cCould not initialise storage: &f%error%"
+  packetevents-missing: "%prefix%&cPacketEvents not detected! Install PacketEvents to enable packet checks."
+  luckperms-detected: "%prefix%&7LuckPerms detected: &f%state%"
+  webhook-enabled: "%prefix%&7Discord webhook: &f%state%"

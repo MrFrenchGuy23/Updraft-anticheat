@@ -1,0 +1,31 @@
+# ============================================================
+#  Updraft Anti-Cheat — Punishments config
+# ============================================================
+
+# Console commands executed for the BAN_COMMAND action tier.
+# Placeholders: %player%, %uuid%, %check%, %check-display%, %vl%, %ping%
+ban-commands:
+  - "ban %player% Cheating (%check%)"
+
+# Kick message templates (placeholders: %check%, %vl%, %ping%).
+kick:
+  message: "&cYou have been disconnected.\n&7Reason: &fUnfair advantage (%check%)"
+
+# Warning message shown in chat on WARN action (placeholders same).
+warn:
+  message: "&c&l[AC] &7You have been flagged for &f%check% &7(VL: &f%vl%&7)."
+
+# LuckPerms track demotion.
+luckperms:
+  # Enable track demotion on LP_DEMOTE action.
+  enabled: true
+  # Name of the LuckPerms track to descend.
+  track: "anticheat"
+  # Console command to run when demoting (placeholders: %player%, %track%, %group%).
+  # If blank, the API will be used directly.
+  demote-command: "lp user %player% promote %track%"
+  # Fallback group applied if the player falls off the bottom of the track.
+  fallback-group: "default"
+
+# Time (ms) to wait before allowing the same player to be punished again for the same check.
+cooldown-ms: 3000

@@ -1,0 +1,334 @@
+# ============================================================
+#  Updraft Anti-Cheat — Checks configuration
+#
+#  Each check has:
+#    enabled       : bool
+#    max-vl        : the violation level after which further flags no longer add
+#    decay         : VL removed per second of clean behavior (0 = no decay)
+#    cancel-vl     : VL at which we begin cancelling the offending packet/action
+#    action-tiers  : map of "vl threshold -> action list"
+#                    Actions: CANCEL, WARN, ALERT, KICK, BAN_COMMAND, LP_DEMOTE
+#
+#  Every value is documented inline. To disable a check, set enabled: false.
+# ============================================================
+
+defaults:
+  decay: 1.0
+  cancel-vl: 5
+  action-tiers:
+    5:  [ ALERT ]
+    10: [ ALERT, CANCEL ]
+    25: [ ALERT, CANCEL, KICK ]
+    50: [ ALERT, CANCEL, BAN_COMMAND, LP_DEMOTE ]
+
+combat:
+  killaura:
+    enabled: true
+    max-vl: 100
+    decay: 1.0
+    cancel-vl: 8
+    # 1.0 = max angle of attack yaw deviation tolerated
+    max-angle: 45.0
+    # Tolerated attacks per tick (1 = legitimate, >1 is multi-aura)
+    max-attacks-per-tick: 1
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+      30: [ ALERT, CANCEL, KICK ]
+  reach:
+    enabled: true
+    max-vl: 100
+    decay: 1.0
+    cancel-vl: 5
+    # Max tolerated attack distance in blocks (3.0 vanilla, +0.5 for latency).
+    max-distance: 3.5
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+      30: [ ALERT, CANCEL, KICK ]
+  criticals:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  autoclicker:
+    enabled: true
+    max-vl: 80
+    decay: 1.0
+    cancel-vl: 8
+    # Max tolerated clicks per second.
+    max-cps: 16
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  velocity:
+    enabled: true
+    max-vl: 50
+    decay: 0.5
+    cancel-vl: 5
+    # Min vertical velocity taken (%) that we expect to observe vs predicted.
+    min-accepted-percent: 70
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+
+movement:
+  fly:
+    enabled: true
+    max-vl: 100
+    decay: 0.5
+    cancel-vl: 5
+    # Vertical motion (blocks/tick) that cannot be explained by the server.
+    max-unexplained-vertical: 0.05
+    action-tiers:
+      3:  [ ALERT ]
+      10: [ ALERT, CANCEL ]
+      25: [ ALERT, CANCEL, KICK ]
+  speed:
+    enabled: true
+    max-vl: 100
+    decay: 1.0
+    cancel-vl: 5
+    # Multiplier on the vanilla ground-speed budget.
+    speed-budget-multiplier: 1.05
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+      30: [ ALERT, CANCEL, KICK ]
+  nofall:
+    enabled: true
+    max-vl: 50
+    decay: 0.5
+    cancel-vl: 4
+    action-tiers:
+      3:  [ ALERT ]
+      10: [ ALERT, CANCEL ]
+  jesus:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  step:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    # Maximum legitimate step height (0.6 = slab, 1.0 = full block = cheat).
+    max-step: 0.6
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  spider:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  timer:
+    enabled: true
+    max-vl: 100
+    decay: 1.0
+    cancel-vl: 5
+    # Allowed deviation of movement-packet rate from server expected (percent).
+    balance-deviation-percent: 5
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+      30: [ ALERT, CANCEL, KICK ]
+  glide:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    # Min downward acceleration expected (blocks/tick^2) when falling.
+    min-fall-acceleration: 0.01
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+
+world:
+  fastbreak:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    # Minimum ms between breaking two blocks.
+    min-break-ms: 50
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  fastplace:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    min-place-ms: 50
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  nuker:
+    enabled: true
+    max-vl: 80
+    decay: 1.0
+    cancel-vl: 5
+    # Max blocks breakable in the same tick legitimately (1 = single block).
+    max-blocks-per-tick: 1
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+      30: [ ALERT, CANCEL, KICK ]
+  scaffold:
+    enabled: true
+    max-vl: 80
+    decay: 1.0
+    cancel-vl: 5
+    # Max pitch change between move and place packet (degrees). Scaffold snaps pitch.
+    suspicious-pitch-change: 60.0
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  tower:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  reachblock:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    max-distance: 5.5
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+
+player:
+  fasteat:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    # Minimum ms a legitimate eat takes.
+    min-eat-ms: 1500
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  fastbow:
+    enabled: true
+    max-vl: 50
+    decay: 1.0
+    cancel-vl: 4
+    # Minimum ms to fully charge a bow.
+    min-charge-ms: 1100
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  inventorymove:
+    enabled: true
+    max-vl: 30
+    decay: 1.0
+    cancel-vl: 4
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  blink:
+    enabled: true
+    max-vl: 50
+    decay: 0.5
+    cancel-vl: 5
+    # Suspicious gap between expected and observed flying packets (ms).
+    min-gap-ms: 200
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+  aim:
+    enabled: true
+    max-vl: 50
+    pitch-movement-yaw-cov: 0.05
+    decay: 1.0
+    cancel-vl: 8
+    action-tiers:
+      5:  [ ALERT ]
+      15: [ ALERT, CANCEL ]
+
+client:
+  brand:
+    enabled: true
+    max-vl: 10
+    decay: 0.0
+    cancel-vl: 100
+    # Blacklisted substrings inside the client brand string (case-insensitive).
+    blacklist: [ "wurst", "impact", "liquidbounce", "meteor", "rusherhack", "sigma", "aristois", "future", "novoline" ]
+    action-tiers:
+      1: [ ALERT ]
+  mods:
+    enabled: true
+    max-vl: 10
+    decay: 0.0
+    cancel-vl: 100
+    action-tiers:
+      1: [ ALERT ]
+
+# ============================================================
+#  Client mod detection registry
+#
+#  Detects cheats by:
+#    channels       : plugin message channel names registered by the client
+#    brand-contains : substrings matched (case-insensitive) inside the client brand
+#
+#  Each entry can trigger any valid action. To add a mod, copy an entry
+#  and fill in the channels/brand-contains you observed.
+#  Leave a list empty to ignore that signal for this entry.
+# ============================================================
+mods:
+  - name: "Wurst"
+    channels: [ "WURST" ]
+    brand-contains: [ "wurst" ]
+    actions: [ ALERT ]
+  - name: "Impact"
+    channels: [ "IMPACT" ]
+    brand-contains: [ "impact" ]
+    actions: [ ALERT ]
+  - name: "LiquidBounce"
+    channels: [ "LIQUIDBOUNCE" ]
+    brand-contains: [ "liquidbounce" ]
+    actions: [ ALERT ]
+  - name: "Meteor Client"
+    channels: [ "METEOR" ]
+    brand-contains: [ "meteor" ]
+    actions: [ ALERT ]
+  - name: "Baritone"
+    channels: [ "BARITONE" ]
+    brand-contains: [ "baritone" ]
+    actions: [ ALERT ]
+  - name: "RusherHack"
+    channels: [ "RUSHERHACK" ]
+    brand-contains: [ "rusherhack" ]
+    actions: [ ALERT ]
+  - name: "Sigma"
+    channels: [ "SIGMA" ]
+    brand-contains: [ "sigma" ]
+    actions: [ ALERT ]
+  - name: "Aristois"
+    channels: [ "ARISTOIS" ]
+    brand-contains: [ "aristois" ]
+    actions: [ ALERT ]
+  - name: "Future"
+    channels: [ "FUTURE" ]
+    brand-contains: [ "future" ]
+    actions: [ ALERT ]
+  - name: "Novoline"
+    channels: [ "NOVOLINE" ]
+    brand-contains: [ "novoline" ]
+    actions: [ ALERT ]

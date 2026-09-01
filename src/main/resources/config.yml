@@ -1,0 +1,164 @@
+# ============================================================
+#  Updraft Anti-Cheat — General configuration
+#  Do NOT delete keys; set values to override defaults.
+# ============================================================
+
+general:
+  # Toggle the entire anticheat. When false, no checks run.
+  enabled: true
+
+  # Bungee-compatible server id (left blank unless you use multiple servers sharing storage).
+  server-id: ""
+
+  # When true, prints verbose diagnostics to console (keep false on production).
+  verbose: false
+
+  # When true, players with updraft.bypass.* never trigger punishments (VL still counts).
+  count-bypass-violations: true
+
+# ------------------------------------------------------------
+#  Storage — where violation / punishment / meta data lives.
+#  type: sqlite (default, zero-config) | mysql
+# ------------------------------------------------------------
+storage:
+  type: sqlite
+
+  # Used only for MySQL.
+  mysql:
+    host: localhost
+    port: 3306
+    database: minecraft
+    username: root
+    password: ""
+    # Extra HikariCP settings.
+    properties:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout-ms: 10000
+      idle-timeout-ms: 600000
+      max-lifetime-ms: 1800000
+
+  # How long to keep historical logs (days). 0 = forever.
+  retention-days: 30
+
+  # Async write batching. Flush interval in ticks (20 ticks = 1 second).
+  flush-interval-ticks: 100
+
+# ------------------------------------------------------------
+#  Performance & correctness thresholds.
+#  Below these, players are temporarily exempt to avoid false positives.
+# ------------------------------------------------------------
+performance:
+  # Minimum server TPS required to run movement/combat checks.
+  min-tps: 19.0
+
+  # Max ping (ms) before a player is considered too laggy for sensitive checks.
+  max-ping-ms: 350
+
+  # Exempt a player for this many ms after a teleport.
+  teleport-exemption-ms: 2000
+
+  # Exempt a player for this many ms after taking damage / velocity.
+  damage-exemption-ms: 800
+
+# ------------------------------------------------------------
+#  Staff alerts — bossbar + hotbar.
+# ------------------------------------------------------------
+alerts:
+  # Show a rolling bossbar with the most recent violation.
+  bossbar-enabled: true
+  # Show a hotbar (action bar) message to staff on every flag.
+  hotbar-enabled: true
+  # Minimum delay (ms) between alerts of the same check for the same player.
+  cooldown-ms: 600
+  # Color tiers by current VL bucket. Adventure color names.
+  colors:
+    low: YELLOW
+    medium: GOLD
+    high: RED
+
+# ------------------------------------------------------------
+#  Command logger & flagger.
+#  Logs executed commands to the DB (up_commands) and flags
+#  suspicious ones. The flagged-commands list lives in checks.yml
+#  under client.command.
+# ------------------------------------------------------------
+command-logger:
+  # Master switch for both logging and flagging.
+  enabled: true
+  # When true, every non-ignored command is stored in the up_commands table.
+  # When false, only flagged commands are stored.
+  log-all-commands: true
+  # Longest stored command (chars). Longer commands are truncated.
+  max-command-length: 200
+  # Commands never logged or flagged (prefix match, case-insensitive).
+  ignored:
+    - "/login"
+    - "/register"
+    - "/l"
+    - "/reg"
+    - "/changepassword"
+    - "/email"
+
+# ------------------------------------------------------------
+#  Anti-xray (packet-level ore hiding).
+#  Hidden ores are replaced in chunk data (and block-change packets when
+#  engine: OBFUSCATE) for players without the bypass permission. The fake
+#  block is chosen from disguise-blocks by world type and Y coordinate.
+#  Block names are vanilla ids (with or without the minecraft: prefix).
+# ------------------------------------------------------------
+anti-xray:
+  # Master switch.
+  enabled: false
+  # OBFUSCATE also rewrites block-change packets (recommended).
+  # SIMPLE only hides ores inside freshly sent chunk data.
+  engine: OBFUSCATE
+  # Worlds this applies to. Empty list = every world.
+  world-whitelist: []
+  # Players holding this node (or updraft.bypass.* / updraft.*) see real ores.
+  bypass-permission: updraft.bypass.antixray
+  # Ores to hide. deepslate/redstone/deepslate-redstone variants are included.
+  hidden-blocks:
+    - coal_ore
+    - deepslate_coal_ore
+    - iron_ore
+    - deepslate_iron_ore
+    - copper_ore
+    - deepslate_copper_ore
+    - gold_ore
+    - deepslate_gold_ore
+    - redstone_ore
+    - lit_redstone_ore
+    - deepslate_redstone_ore
+    - deepslate_lit_redstone_ore
+    - diamond_ore
+    - deepslate_diamond_ore
+    - lapis_ore
+    - deepslate_lapis_ore
+    - emerald_ore
+    - deepslate_emerald_ore
+    - nether_quartz_ore
+    - nether_gold_ore
+    - ancient_debris
+  # Disguise block used in place of a hidden ore.
+  disguise-blocks:
+    default: stone          # above y=0 in the overworld
+    deepslate: deepslate    # below y=0 in the overworld
+    netherrack: netherrack  # the nether
+
+# ------------------------------------------------------------
+#  Discord webhook (leave url blank to disable).
+# ------------------------------------------------------------
+discord:
+  enabled: false
+  url: ""
+  # Which actions trigger a webhook post: ALERT, KICK, BAN_COMMAND, LP_DEMOTE
+  trigger-on: [ ALERT, KICK, BAN_COMMAND, LP_DEMOTE ]
+  # Min VL to post about.
+  min-vl: 5
+  # Cooldown per check per player (ms).
+  cooldown-ms: 5000
+  # A display name for the webhook sender.
+  username: "Updraft AC"
+  # Avatar URL (optional).
+  avatar-url: ""
